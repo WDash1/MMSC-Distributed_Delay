@@ -1,0 +1,7 @@
+*.png
+*.mp4
+*.log.*
+*.h5
+*.pyc
+*.log
+*.DS_Store
