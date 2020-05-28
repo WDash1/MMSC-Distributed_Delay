@@ -1,6 +1,6 @@
 ##  @brief      This file acts as an example of how one might produce various
-#               plots of trajectories in the standard Schnakenberg ODE system,
-#               with no time delay, by using the StandardSchnakenberSimulator
+#               plots of trajectories in the fixed delay Schnakenberg 
+#               system, by using the FixedDelaySchnakenbergSimulator
 #               class.
 
 import numpy as NP;
@@ -10,12 +10,13 @@ from mpl_toolkits import mplot3d
 
 import sys
 sys.path.append('../Schnakenberg_Kinetics/')
-from StandardSchnakenbergSimulator import StandardSchnakenbergSimulator;
+from FixedDelaySchnakenbergSimulator import FixedDelaySchnakenbergSimulator;
 
 
 # Parameter values for the kinetics.
 a=9
 b=2
+tau = 1;
 
 
 # Compute the corresponding fixed point values for the system.
@@ -26,17 +27,14 @@ v_fixed = b/((b+a)**2);
 # The time values at which we wish to compute the values of the trajectories.
 t_values = NP.linspace(0, 2, num=300);
 
-
-# Create a trajectory simulator object.
-trajectory_simulator = StandardSchnakenbergSimulator(a, b, t_values, 
-                                                     atol = 1.0e-8,
-                                                     rtol = 1.0e-6);
+# Create a trajectory simulator object with a fixed delay.
+trajectory_simulator = FixedDelaySchnakenbergSimulator(a, b, tau, t_values);
 
 
 # Simulate trajectories for the standard Schnakenberg system, using
 # several different initial conditons.
-u0_values = [1,3,20];
-v0_values = [5,10,3];
+u0_values = [lambda t: t, lambda t: 5*t, lambda t: 0.8*t];
+v0_values = [lambda t: 2*t, lambda t: t,lambda t: 8*t];
 u_sol_1, v_sol_1 = trajectory_simulator.generateTrajectory(u0_values[0], 
                                                          v0_values[0]);
 u_sol_2, v_sol_2 = trajectory_simulator.generateTrajectory(u0_values[1],
@@ -49,9 +47,9 @@ u_sol_3, v_sol_3 = trajectory_simulator.generateTrajectory(u0_values[2],
 line_colours = ['r', 'g', 'b', 'y'];
 line_styles = ['-', '-', '-', '--'];
 line_settings = list(map(lambda x,y: x+y, line_colours, line_styles));
-legend_strings = ['$u_0 = '+str(u0_values[0])+', v_0 = '+str(v0_values[0])+'$',
-        '$u_0 = '+str(u0_values[1])+', v_0 = '+str(v0_values[1])+'$',
-        '$u_0 = '+str(u0_values[2])+', v_0 = '+str(v0_values[2])+'$',
+legend_strings = ['$u_0 = t, v_0 = 2t$',
+        '$u_0 = 5t, v_0 = t$',
+        '$u_0 = 0.8t, v_0 = 8t$',
         '$u_0 = u_*, v_0 = v_*$'];
 
 # Plot the u values over time.
@@ -63,7 +61,7 @@ plot(t_values, u_sol_2, line_settings[1]);
 plot(t_values, u_sol_3, line_settings[2]);
 plot(t_values, NP.ones((len(t_values),1)) * u_fixed, line_settings[3]);
 legend(legend_strings);
-title("No Delay Schnakenberg $u(t)$ Simuations");
+title(r'Fixed $\tau=$'+str(tau)+" Delay Schnakenberg $u(t)$ Simuations");
 
 
 # Plot the v values over time.
@@ -75,7 +73,7 @@ plot(t_values, v_sol_2, line_settings[1]);
 plot(t_values, v_sol_3, line_settings[2]);
 plot(t_values, NP.ones((len(t_values),1)) * v_fixed, line_settings[3]);
 legend(legend_strings);
-title("No Delay Schnakenberg $v(t)$ Simuations");
+title(r'Fixed $\tau=$'+str(tau)+' Delay Schnakenberg $v(t)$ Simuations');
 
 
 
@@ -88,16 +86,16 @@ plot(u_sol_2, v_sol_2, line_settings[1]);
 plot(u_sol_3, v_sol_3, line_settings[2]);
 plot([u_fixed], [v_fixed], line_colours[3]+'o');
 legend(legend_strings);
-title("No Delay Schnakenberg Trajectories")
+title(r'Fixed $\tau=$'+str(tau)+' Delay Schnakenberg Trajectories');
 
 
 
 # Plot the trajecotry curves in 3D.
 fig = plt.figure(4);
 ax = plt.axes(projection='3d');
-ax.set_xlabel('u');
-ax.set_ylabel('v');
-ax.set_zlabel('t');
+ax.set_xlabel('$u$');
+ax.set_ylabel('$v$');
+ax.set_zlabel('$t$');
 ax.plot(u_sol_1, v_sol_1, t_values, line_settings[0]);
 ax.plot(u_sol_2, v_sol_2, t_values, line_settings[1]);
 ax.plot(u_sol_3, v_sol_3, t_values, line_settings[2]);
@@ -105,4 +103,4 @@ ax.plot(NP.ones((len(t_values), 1)) * u_fixed,
         NP.ones((len(t_values), 1)) * v_fixed,
         t_values, line_settings[3])
 legend(legend_strings);
-fig.suptitle('No Delay Schnakenberg Trajectories');
+fig.suptitle(r'Fixed $\tau=$'+str(tau)+' Delay Schnakenberg Trajectories');
