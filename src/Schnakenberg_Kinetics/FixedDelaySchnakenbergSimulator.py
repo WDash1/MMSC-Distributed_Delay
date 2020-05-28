@@ -48,7 +48,7 @@ class FixedDelaySchnakenbergSimulator:
     #               type double. This corresponds to the initial data for the
     #               variable u, that we wish to use for the trajectory
     #               simulation.    
-    #   @param u0   This must be a function which takes a value of type double
+    #   @param v0   This must be a function which takes a value of type double
     #               in the interval \f$ [-\tau, 0] \f$ and returns a value of
     #               type double. This corresponds to the initial data for the
     #               variable v, that we wish to use for the trajectory
