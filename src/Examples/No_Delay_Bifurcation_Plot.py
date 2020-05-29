@@ -1,3 +1,6 @@
+# @brief    This file is designed to be an example of how to produce
+#           bifurcation plots for the no delay Schnakenberg ODE system.
+
 import numpy as NP;
 import scipy.linalg as LA;
 import matplotlib.pyplot as plt
@@ -92,4 +95,5 @@ p = plt.imshow(fixed_point_types, extent=[0, max(a_values), max(b_values), 0]);
 plt.xlabel('$a$');
 plt.ylabel('$b$');
 plt.gca().invert_yaxis()
+fig.savefig('fig2.png', dpi=300);
 plt.show();
