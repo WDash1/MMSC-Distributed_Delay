@@ -1,0 +1,62 @@
+\section{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator Class Reference}
+\label{class_fixed_delay_schnakenberg_simulator_1_1_fixed_delay_schnakenberg_simulator}\index{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator@{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator}}
+
+
+This class is designed to produce numerical simulations of trajectories in the fixed delay Schnakenberg ODE system: $ \frac{du}{dt}(t) = a - u(t) + u^2(t-\tau)v(t-\tau) $ $ \frac{dv}{dt}(t) = b - u^2(t-\tau)v(t-\tau) $, for a given set of parameters.  
+
+
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+def {\bf \_\-\_\-init\_\-\_\-}
+\begin{DoxyCompactList}\small\item\em The constructor of this class. \item\end{DoxyCompactList}\item 
+def {\bf generateTrajectory}
+\begin{DoxyCompactList}\small\item\em This method produces a simulation of a trajectory in the fixed time delay Schnakenberg ODE system, for a given set of initial conditions. \item\end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+This class is designed to produce numerical simulations of trajectories in the fixed delay Schnakenberg ODE system: $ \frac{du}{dt}(t) = a - u(t) + u^2(t-\tau)v(t-\tau) $ $ \frac{dv}{dt}(t) = b - u^2(t-\tau)v(t-\tau) $, for a given set of parameters. 
+
+\subsection{Member Function Documentation}
+\index{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator@{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator}!\_\-\_\-init\_\-\_\-@{\_\-\_\-init\_\-\_\-}}
+\index{\_\-\_\-init\_\-\_\-@{\_\-\_\-init\_\-\_\-}!FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator@{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator}}
+\subsubsection[{\_\-\_\-init\_\-\_\-}]{\setlength{\rightskip}{0pt plus 5cm}def FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator::\_\-\_\-init\_\-\_\- (
+\begin{DoxyParamCaption}
+\item[{}]{ self, }
+\item[{}]{ a, }
+\item[{}]{ b, }
+\item[{}]{ tau, }
+\item[{}]{ t\_\-values}
+\end{DoxyParamCaption}
+)}\label{class_fixed_delay_schnakenberg_simulator_1_1_fixed_delay_schnakenberg_simulator_acc66693592bc3a6d3776f3aea0e9d1e3}
+
+
+The constructor of this class. 
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em a}]This must be a value of type double, which corresponds to the value of the a coefficient which will be used in the governing equation: $ \frac{du}{dt}(t) = a - u(t) + u^2(t-\tau)v(t-tau) $. \item[{\em b}]This must be a value of type double, which corresponds to the value of the b coefficient which will be used in the govenring equation: $ \frac{dv}{dt}(t) = b - u^2(t-\tau)v(t-\tau) $. \item[{\em t\_\-values}]This must be an array of type double, whose entries are all $>$=0. This argument corresponds to the values in time at which we which we wish to determine the value of u(t) and v(t) in our trajectory simulations. \item[{\em tau}]This must be a value of type double which is $>$0 and corresponds to the time delay which will be used in the governing equations. \end{DoxyParams}
+\index{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator@{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator}!generateTrajectory@{generateTrajectory}}
+\index{generateTrajectory@{generateTrajectory}!FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator@{FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator}}
+\subsubsection[{generateTrajectory}]{\setlength{\rightskip}{0pt plus 5cm}def FixedDelaySchnakenbergSimulator::FixedDelaySchnakenbergSimulator::generateTrajectory (
+\begin{DoxyParamCaption}
+\item[{}]{ self, }
+\item[{}]{ u0, }
+\item[{}]{ v0}
+\end{DoxyParamCaption}
+)}\label{class_fixed_delay_schnakenberg_simulator_1_1_fixed_delay_schnakenberg_simulator_a8fce368b45d316d8bd72b47bf5388ba4}
+
+
+This method produces a simulation of a trajectory in the fixed time delay Schnakenberg ODE system, for a given set of initial conditions. 
+
+
+\begin{DoxyParams}{Parameters}
+\item[{\em u0}]This must be a function which takes a value of type double in the interval $ [-\tau, 0] $ and returns a value of type double. This corresponds to the initial data for the variable u, that we wish to use for the trajectory simulation. \item[{\em v0}]This must be a function which takes a value of type double in the interval $ [-\tau, 0] $ and returns a value of type double. This corresponds to the initial data for the variable v, that we wish to use for the trajectory simulation. \end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+This function returns two arrays of size n, where n is used to denote the length of the t\_\-values array given to the constructor of this class. The first of these arrays corresponds to the values of u attained on the requested trajectory at the time values specified in the t\_\-values array given to the constructor of this class. The second of these arrays corresponds to the value of v attained on the requested trajectory at the time values specified in the t\_\-values array given to the constructor of this class. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file:\begin{DoxyCompactItemize}
+\item 
+C:/Users/William/Desktop/Distributed\_\-Delay\_\-Code/MMSC-\/Distributed\_\-Delay/src/Schnakenberg\_\-Kinetics/FixedDelaySchnakenbergSimulator.py\end{DoxyCompactItemize}
