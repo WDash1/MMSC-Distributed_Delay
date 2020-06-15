@@ -1,0 +1,38 @@
+M=10;
+
+a_amt = 10;
+b_amt = 10;
+
+a_values = linspace(0.01, 5, a_amt);
+b_values = linspace(0.01, 5, b_amt);
+
+tau_amt  = 5;
+tau_values = linspace(0, 3, tau_amt);
+    
+Ms = zeros(M);
+for tau_index = 1:tau_amt
+    current_tau = tau_values(tau_index);
+    parfor i=1:M
+        current_a = a_values(i);
+        for j=1:M
+            current_b = b_values(j);
+            Ms(i,j) = DispersRel(current_tau, current_a, current_b)>0;
+        end
+    end
+
+
+
+    %Need to sort out axis labels/plotting here! Blue is no instability, yellow
+    %is unstable.
+    figure tau_index
+
+    %image('XData',[0 max(As)],'YData',[0 max(Bs)],'CData',Ms) ;
+    imagesc(linspace(0,max(As),M), linspace(0,max(Bs),M), Ms);
+
+set(gca,'YDir','normal')
+xlabel('{\it a}');
+ylabel('{\it b}');
+title('Bifurcation Plot for \tau = '+string(tau)+' Delay Schnakenberg Kinetics');
+print('-r300','-dpng','Fig1.png');
+
+end
