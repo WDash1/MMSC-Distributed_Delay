@@ -1,14 +1,12 @@
 function [reLambda] = DispersRel(tau, a, b)
 
-[f,g] = funs(tau,a,b,20);
+[f,g] = funs(tau,a,b,30);
 
-lambda = max(roots([f;g]));
-if(abs(lambda(1))<1e-10)
-    lambda(1)=-1;
-end
+values = roots([f;g]);
+real_componnents = values(:,1);
 
-reLambda = lambda(1);
-%imLambda = lambda(2);
+reLambda = max(real_componnents);
+
 
 end
 
