@@ -50,7 +50,7 @@ for tau_index = 1:tau_amt
     set(gca,'YTick',0:1.0:max(b_values));
     set(gca,'yticklabel',num2str(get(gca,'ytick')','%.1f'))
     
-    title(strcat('Fixed Delay Bifurcation Plot for \tau = ', num2str(current_tau, '%.2f')));
+    title(strcat('\tau = ', num2str(current_tau, '%.2f')));
 %    print('-r300','-dpng','Fig'+string(tau_index)+'.png');
     print('Output_Images/Fig'+string(tau_index), '-dpng', '-r300');
 end
