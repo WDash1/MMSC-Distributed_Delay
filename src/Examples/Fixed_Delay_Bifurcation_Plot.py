@@ -30,37 +30,68 @@ def computeEigenvalues(a,b, tau):
     u_fixed = b+a;
     v_fixed = b/((b+a)**2);
     
-    
+
+
     characteristic_function = lambda mu: mu**2 + \
                             mu*(1+(u_fixed**2 - 2*u_fixed*v_fixed)*NP.exp(-tau*mu))+ \
                             u_fixed**2 * NP.exp(-tau*mu);
+
+    
+    optimisation_function = lambda mu: abs(characteristic_function(mu[0] + mu[1]*1j));
+            
+    
+    
+    re_initial_guesses = NP.linspace(-5.0,5.0,num=40);
+    im_initial_guesses = NP.linspace(-5.0,5.0,num=40);
+    
+    
+    eigenvalues = [];
+    
+    for re_initial_guess in re_initial_guesses:
+        for im_initial_guess in im_initial_guesses:
+            res = minimize(optimisation_function, [re_initial_guess,im_initial_guess]);   
+            
+            if(res.success==True):
+                eigenvalues = eigenvalues + [res.x[0] + res.x[1]*1j];
+                print("Success with minimum: "+str(eigenvalues));
+
+                if(res.x[0]>0):
+                    return eigenvalues;        
+                
+                
+                
+            #elif(res.success==False):
+                #print("Failure with x: "+str(re_initial_guess)+" y: "+str(im_initial_guess));
+    
+    
+    
     
     
     #Attempt to find the complex eigenvalues of the characteristics equation,
     #however, in most cases this fails to converge and is problematic since
     #it requires an initial guess.
     # Convert the domtain of the characteristic function for the C to R^2.
-    #optimisation_function = lambda mu: abs(characteristic_function(mu[0] + mu[1]*1j));
-    #res = minimize(optimisation_function, [a,b]);
+    #o
     #minimiser = res.x[0] + res.x[1]*1j;
     
-    minimisation_settings = minimize_scalar(characteristic_function);
+    #minimisation_settings = minimize_scalar(characteristic_function);
     
-    return minimisation_settings.x;
+    return eigenvalues;
 
 
 
 
 # Generate a list of a and b values that will be used to produce a bifurcation
 # plot.    
-a_amt = 50;
+a_amt = 10;
 a_values = NP.linspace(0.001, 3, num=a_amt);
-b_amt=50;
+b_amt=10;
 b_values = NP.linspace(0.001, 3, num=b_amt);
 
 
 # The tau values to be used for each of the bifurcation plots.
-tau_values = NP.linspace(0, 10, num=50);
+#tau_values = NP.linspace(0, 10, num=50);
+tau_values =[1];
 
 
 # The numeric values that will be assigned for each type of fixed point.
@@ -71,6 +102,8 @@ unstable_spiral_colour_value = -5;
 stable_spiral_colour_value = -3;
 
 
+
+#computeEigenvalues(0.5, 0.02, 0);
 
 # Iterate through each of the delay values and produce a bifurcation plot for
 # of them.
@@ -91,29 +124,44 @@ for tau_index in range(0, len(tau_values)):
 
             eigenvalues = computeEigenvalues(a, b, current_tau);
         
-            max_eigenvalue = max([eigenvalues]);
-            min_eigenvalue = min([eigenvalues]);
-
+            if(len(eigenvalues)>0):
+                
         
-            # If the fixed point is asymptotically unstable.        
-            if(min_eigenvalue>0):
-                fixed_point_types[i][j] = source_colour_value;
+                re_componnents = NP.real(eigenvalues);
+                im_componnents = NP.imag(eigenvalues);
             
-            # If fixed point is a hyperbolic saddle.
-            elif(min_eigenvalue<0 and max_eigenvalue>0):
-                fixed_point_types[i][j] = saddle_colour_value;
-
-            # If the fixed point is asymptotically stable.
-            elif(max_eigenvalue<0):
-                fixed_point_types[i][j] = sink_colour_value;
-       
+                max_real = max(re_componnents);
+                min_real = min(re_componnents);
+            
+            
+                max_imag = max(abs(im_componnents));
+        
+                # If the fixed point is asymptotically unstable.        
+                if(min_real>0):
+                    if(max_imag > 1e-6):
+                        fixed_point_types[i][j] = unstable_spiral_colour_value;
+                    else:
+                        fixed_point_types[i][j] = source_colour_value;
+            
+                # If fixed point is a hyperbolic saddle.
+                    #elif(min_eigenvalue<0 and max_eigenvalue>0):
+                    #    fixed_point_types[i][j] = saddle_colour_value;
+                            
+                            # If the fixed point is asymptotically stable.
+                elif(max_real<0):
+                    if(max_imag > 1e-6):
+                        fixed_point_types[i][j] = stable_spiral_colour_value;
+                    else:
+                        fixed_point_types[i][j] = sink_colour_value;
+                    
+               
 
     # Plot types of fixed point in a bifurcatiion diagram.
     XX, YY = NP.meshgrid(a_values, b_values);
     fig = plt.figure();
     plt.title(r'Bifurcation Plot for $\tau = '+str(round(current_tau, 2))+'$ Delay Schnakenberg Kinetics');
     p = plt.imshow(fixed_point_types, extent=[0, max(a_values), max(b_values), 0]);
-    #plt.colorbar(p);
+    plt.colorbar(p);
     plt.xlabel('$a$');
     plt.ylabel('$b$');
     plt.gca().invert_yaxis()
