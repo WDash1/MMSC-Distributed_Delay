@@ -1,8 +1,8 @@
 t_values = linspace(10,30,500);
 
 
-alpha_amt = 10;
-beta_amt = 10;
+alpha_amt = 500;
+beta_amt = 500;
 N=20;
 
 alpha_values = linspace(-10,2,alpha_amt);
