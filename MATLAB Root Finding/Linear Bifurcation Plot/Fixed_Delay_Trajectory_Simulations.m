@@ -3,11 +3,11 @@
 t_values = linspace(0,30,500);
 
 %The number of integral discretisation points.
-N=20;
+N=21;
 
 %The parameter values that we wish to use for our simulation.
-alpha_amt = 100;
-beta_amt = 100;
+alpha_amt = 10;
+beta_amt = 10;
 %alpha_values = linspace(-2.5,-1.75,alpha_amt);
 %beta_values = linspace(3.25,3.75,beta_amt);
 alpha_values = linspace(-10,2,alpha_amt);
@@ -73,7 +73,7 @@ end
 function [x,y] = compute_trajectory_simulation(alpha, beta, N, t_values, y0)
     delay_times = linspace(0,1,N);
     delay_times = delay_times(2:end);
-    dydt = @(t,y,Z) model(alpha, beta, N, t,y,Z);
+    dydt = @(t,y,Z) simpsons_38_rule_model(alpha, beta, N, t,y,Z);
     
     options = odeset('RelTol',1e-5,'Events',@terminalEventFcn);
     sol = dde23(dydt, delay_times, y0, t_values, options);
@@ -82,8 +82,36 @@ function [x,y] = compute_trajectory_simulation(alpha, beta, N, t_values, y0)
     y = sol.y;
 end
 
-%This function returns the derivatie of the model.
-function derivative = model(alpha, beta, N, t,y,Z)
+%This function uses the trapezium rule to approximate the derivative in the
+%system, for a given set of parameters.
+function derivative = trapezium_rule_model(alpha, beta, N, t,y,Z)
     sum_values = sum(Z);
     derivative = alpha*y + beta/N*(-(y+Z(end,end))/2 + sum_values);
+end
+
+%This function uses the composite simpsons rule to approximate the
+%derivative in the system, for a given set of parameters.
+function derivative = simpsons_rule_model(alpha, beta, N, t,y,Z)
+    even_indicies = linspace(3, N-2, ((N-1)/2)-1);
+    odd_indicies = linspace(2, N-1, ((N-1)/2));
+    
+    sum_value = y+2*sum(Z(even_indicies)) + 4*sum(Z(odd_indicies))+Z(end);
+    derivative = alpha*y + beta/(3*N)*sum_value;
+end
+
+%This function uses the composite simpsons 38 rule to approximate the
+%derivative in the system, for a given set of parameters.
+function derivative = simpsons_38_rule_model(alpha, beta, N, t,y,Z)
+    third_indicies = linspace(4,N-3, ((N-1)/3)-1);
+    
+    first_third_indicies = linspace(3,N-1, ((N-1)/3));
+    second_third_indicies = linspace(3,N-1, ((N-1)/3));
+    
+    
+    
+    sum_value = y + 3*(sum(Z(first_third_indicies))+sum(Z(second_third_indicies)))...
+                +2*sum(Z(third_indicies)) + Z(end);
+            
+            
+    derivative = alpha*y + (3/8)*(beta/N)*sum_value;
 end
