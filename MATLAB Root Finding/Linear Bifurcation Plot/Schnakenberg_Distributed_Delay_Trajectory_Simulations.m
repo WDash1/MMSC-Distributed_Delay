@@ -8,8 +8,8 @@ N=61;
 %The parameter values that we wish to use for our simulation.
 a_amt = 3;
 b_amt = 3;
-a_values = linspace(0.01,2,a_amt);
-b_values = linspace(0.01,10,b_amt);
+a_values = linspace(0.01,5,a_amt);
+b_values = linspace(0.01,5,b_amt);
 
 %The initial data.
 y0 = @(t) [sin(sqrt(2)*t)+cos(t), sin(sqrt(2)*t)+cos(t)];
@@ -32,7 +32,7 @@ end
 %Plot the stability matrix as a figure.
 figure('Renderer', 'painters', 'Position', [10 10 300 300], 'Visible', 'on')
 colormap(jet);
-imagesc(linspace(min(alpha_values),max(alpha_values),alpha_amt), linspace(min(beta_values),max(beta_values),beta_amt), Ms);
+imagesc(linspace(0,max(a_values),a_amt), linspace(0,max(b_values),b_amt), Ms);
 caxis([0,10]);
     
 set(gca,'YDir','normal')
@@ -46,8 +46,8 @@ set(gca,'FontSize',10)
 set(gca,'XTick',0:0.5:max(a_values));
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.1f'))
     
-set(gca,'YTick',0:2:max(b_values));
-set(gca,'yticklabel',num2str(get(gca,'ytick')','%.0f'))
+set(gca,'YTick',0:0.5:max(b_values));
+set(gca,'yticklabel',num2str(get(gca,'ytick')','%.1f'))
     
 %    print('-r300','-dpng','Fig'+string(tau_index)+'.png');
 print('Linear_Example', '-dpng', '-r300');
