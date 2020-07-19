@@ -1,9 +1,9 @@
 %The time values for which we wish to simulate the trajectories of the
 %system.
-t_values = linspace(0,30,500);
+t_values = linspace(0,20,50);
 
 %The number of integral discretisation points.
-N=31;
+N=3;
 
 %The parameter values that we wish to use for our simulation.
 alpha_amt = 10;
@@ -16,13 +16,16 @@ beta_values = linspace(-20,10,beta_amt);
 %The initial data.
 y0 = @(t) sin(sqrt(2)*t)+cos(t);
 
+
+[legendre_zeros, legendre_weights] = computeGaussLegendreWeights(0, 1, N);
+
 %Run trajectory simulations over the parameter space.
 Ms = zeros(beta_amt, alpha_amt);
 parfor i=1:alpha_amt
     current_alpha = alpha_values(i);
     for j=1:beta_amt
         current_beta = beta_values(j);
-        [solx,soly] = compute_trajectory_simulation(current_alpha, current_beta, N, t_values, y0);
+        [solx,soly] = compute_trajectory_simulation(current_alpha, current_beta, double(legendre_weights), double(legendre_zeros), N, t_values, y0);
         if(max(abs(soly))>1)
             Ms(j,i) = 6;
         else
@@ -70,10 +73,15 @@ end
 
 %This function produces a trajectory simulation, for a given set of
 %parameters.
-function [x,y] = compute_trajectory_simulation(alpha, beta, N, t_values, y0)
-    delay_times = linspace(0,1,N);
-    delay_times = delay_times(2:end);
-    dydt = @(t,y,Z) simpsons_38_rule_model(alpha, beta, N, t,y,Z);
+function [x,y] = compute_trajectory_simulation(alpha, beta, weights, delay_times, N, t_values, y0)
+    %delay_times = linspace(0,1,N);
+    %delay_times = delay_times(2:end);
+    
+    
+    dydt = @(t,y,Z) general_model(alpha, beta, weights, t, y, Z);
+    %dydt = @(t,y,Z) simpsons_38_rule_model(alpha, beta, N, t,y,Z);
+    
+    
     
     options = odeset('RelTol',1e-5,'Events',@terminalEventFcn);
     sol = dde23(dydt, delay_times, y0, t_values, options);
@@ -87,6 +95,13 @@ end
 function derivative = trapezium_rule_model(alpha, beta, N, t,y,Z)
     sum_values = sum(Z);
     derivative = alpha*y + beta/N*(-(y+Z(end,end))/2 + sum_values);
+end
+
+
+function derivative = general_model(alpha, beta, weights, t, y, Z)
+    integrand = [Z];
+    integral_approximation = dot(weights, integrand);
+    derivative = alpha*y + beta*integral_approximation;
 end
 
 %This function uses the composite simpsons rule to approximate the
