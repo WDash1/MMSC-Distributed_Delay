@@ -1,6 +1,6 @@
 %The time values for which we wish to simulate the trajectories of the
 %system.
-t_values = linspace(0,10,100);
+t_values = linspace(0,100,100);
 
 %The number of integral discretisation points.
 %N=10;
@@ -9,24 +9,38 @@ t_values = linspace(0,10,100);
 y0 = @(t) [sin(t),cos(t)];
 
 
-hold on
+hold off
 %plot(t_values, sin(t_values));
 %plot(t_values, cos(t_values));
 
 
+param_amt = 4;
+a_values = [0.01, 2, 3.5, 5];
+b_values = [0.5, 2, 3, 5];
 tau = 0.03;
 a = 0.01;
 b = 0.5;
 sigma = 0.001;
 
 n_amt = 10;
-n_values = (1:n_amt).*2 +50;
+n_values = ((1:n_amt).*2);
 
-cauchy_sequence = generateCauchySequence(a,b,tau,sigma,n_values, 5);
+hold on;
+parfor index = 1:param_amt
+    current_a = a_values(index);
+    current_b = b_values(index);
 
+    cauchy_sequence = generateCauchySequence(current_a,current_b,tau,sigma,n_values, 5);
+    
+    
+    figure
+    plot(n_values(2:end), cauchy_sequence);
+    title("a="+string(current_a)+" b="+string(current_b));
+    xlabel('N');
+    print('Cauchy_Plot'+string(index), '-dpng', '-r300');
 
-plot(n_values(2:end), cauchy_sequence);
-xlabel('N');
+end
+
 
 
 
@@ -53,7 +67,12 @@ function cauchy_sequence = generateCauchySequence(a,b,tau,sigma,n_values, t_max)
         [legendre_zeros, legendre_weights] = computeGaussLegendreWeights(0, 2*tau, current_n);
         sol = compute_trajectory_simulation(a,b,sigma,double(legendre_zeros), double(legendre_weights),t_max,y0);
         
-        current_y_values = deval(sol, comparison_mesh);
+
+        new_comparison_mesh = comparison_mesh;
+        if(max(sol.x)<max(comparison_mesh))
+            new_comparison_mesh = comparison_mesh .* (comparison_mesh < max(sol.x));
+        end
+        current_y_values = deval(sol, new_comparison_mesh);
         current_u_values = current_y_values(1,:);
         current_v_values = current_y_values(2,:);
         
