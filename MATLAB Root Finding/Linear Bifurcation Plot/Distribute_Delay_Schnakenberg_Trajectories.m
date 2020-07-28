@@ -23,7 +23,7 @@ b = 0.5;
 sigma = 0.001;
 
 n_amt = 10;
-n_values = ((1:n_amt).*2);
+n_values = ((1:n_amt).*4);
 
 hold on;
 parfor index = 1:param_amt

@@ -1,5 +1,3 @@
-
-
 %@brief     This function is used to compute the derivative for reaction
 %           diffusion PDE model when using no delay Schnakenberg
 %           reaction kinetics.
@@ -22,36 +20,27 @@
 %           to the largest spatial position. Similarly, the second n+1
 %           entries correspond to the current value of v(t) at each of the
 %           spatial discretisation points, ordered from the smallest to the
-%           largest
-function derivative = computeNoDelaySchnakenbergDerivative(a,b,Du,Dv,n,h,y)
-    %The functions for the schnakenberg system.
+%           largest spatial position.
+%@return    This function returns a column vector of size 2(n+1) that
+%           dictates the value of the corresponding time derivative for
+%           each of the values in the y vector.
+function derivative = computeNoDelaySchnakenbergDerivative2(a,b,Du,Dv,n,h,y, second_derivative_matrix)
+
+    %The no delay Schnakenberg ODE derivative function.
     schnakenberg_u = @(u,v) a - u + (u.^2) .*v;
     schnakenberg_v = @(u,v) b - (u.^2) .*v;
     
+    %The derivative matrix for the spatial dimension, using the central
+    %difference approximation.
     
-    second_derivative_matrix = -2.*diag(ones(1,n+1)) + diag(ones(1,n),1) + diag(ones(1,n),-1);
-    second_derivative_matrix(1,:) = zeros(1,n+1);
-    second_derivative_matrix(n+1,:) = zeros(1,n+1);
-
-    top_row = zeros(1,n+1);
-    top_row(1) = -2;
-    top_row(2) = 2;
-
-    bottom_row = zeros(1,n+1);
-    bottom_row(n) = -2;
-    bottom_row(n-1) = 2;
-
-    second_derivative_matrix(1,:) = top_row;
-    second_derivative_matrix(n+1,:) = bottom_row;
 
 
-    %schnakenberg = @(u,v) [schnakenberg_u(u,v); schnakenberg_v(u,v)];
-
-
+    %Compute the spatial derivative matrix for each of the u and v
+    %componnents.
     u_derivative_matrix = (Du./(h.^2)) .* second_derivative_matrix;
     v_derivative_matrix = (Dv./(h.^2)) .* second_derivative_matrix;
 
-
+    %Add the ODE terms to the partial derivative matrix.
     dudt = @(u,v) u_derivative_matrix * u + schnakenberg_u(u,v);
     dvdt = @(u,v) v_derivative_matrix * v + schnakenberg_v(u,v);
 
