@@ -6,7 +6,7 @@ y0 = @(t) sin(sqrt(2)*t)+cos(t);
 alpha = -6;
 beta = -20;
 
-n_max = 2;
+n_max = 10;
 n_values = 1:n_max;
 
 trapezium_rule_cauchy_sequence = zeros(size(n_values));
@@ -55,18 +55,19 @@ for n = n_values
     end
 end
 
+figure
 hold on;
-loglog(6.*n_values+1, trapezium_rule_cauchy_sequence, '-o', 'DisplayName', 'Trapezium Rule');
-loglog(6.*n_values+1, simpsons_rule_cauchy_sequence, '-o', 'DisplayName', "Simpson's Rule");
-loglog(6.*n_values+1, simpsons_38_rule_cauchy_sequence, '-o', 'DisplayName', "Simpson's 3/8 Rule");
-loglog(6.*n_values+1, gauss_legendre_cauchy_sequence, '-o', 'DisplayName', "Gauss Legendre");
+loglog(6.*n_values+1, trapezium_rule_cauchy_sequence{1}, '-o', 'DisplayName', 'Trapezium Rule');
+loglog(6.*n_values+1, simpsons_rule_cauchy_sequence{2}, '-o', 'DisplayName', "Simpson's Rule");
+loglog(6.*n_values+1, simpsons_38_rule_cauchy_sequence{3}, '-o', 'DisplayName', "Simpson's 3/8 Rule");
+loglog(6.*n_values+1, gauss_legendre_cauchy_sequence{4}, '-o', 'DisplayName', "Gauss Legendre");
 xlabel('{\it N}', 'FontSize', 20);
 %legend
 set(gca,'XScale', 'log', 'YScale', 'log')
 ax = gca;
 ax.FontSize = 20; 
 filename = "linear_example_alpha="+string(alpha)+"_beta="+string(beta)+".eps";
-print -depsc -tiff -r300 -painters filename;
+print('-depsc', '-tiff', '-r300', '-painters', filename);
 
 function [x,y] = compute_trajectory_simulation(delay_times,weights, alpha, beta, t_values, y0)
     delays = delay_times;
