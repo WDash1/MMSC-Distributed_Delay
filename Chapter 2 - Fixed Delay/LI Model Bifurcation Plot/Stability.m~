@@ -1,13 +1,13 @@
 
 
-a_amt = 200;
-b_amt = 200;
+a_amt = 50;
+b_amt = 20;
 
 a_values = linspace(0.01, 2, a_amt);
 b_values = linspace(0.01, 2, b_amt);
 
-tau_amt  = 30;
-tau_values = linspace(0, 3, tau_amt);
+tau_amt  = 5;
+tau_values = linspace(0, 5, tau_amt);
 
 %tau_values = [0.1];    
 Ms = zeros(a_amt, b_amt);

@@ -3,11 +3,11 @@
 a_amt = 200;
 b_amt = 200;
 
-a_values = linspace(0.01, 2, a_amt);
-b_values = linspace(0.01, 2, b_amt);
+a_values = linspace(0.01, 5, a_amt);
+b_values = linspace(0.01, 5, b_amt);
 
 tau_amt  = 30;
-tau_values = linspace(0, 3, tau_amt);
+tau_values = linspace(0, 0.3, tau_amt);
 
 %tau_values = [0.1];    
 Ms = zeros(a_amt, b_amt);
@@ -44,10 +44,10 @@ for tau_index = 1:tau_amt
     x_axis_labels = 0:1:max(a_values);
     y_axis_labels = 0:1:max(b_values);
     
-    set(gca,'XTick',0:0.5:max(a_values));
+    set(gca,'XTick',0:1:max(a_values));
     set(gca,'xticklabel',num2str(get(gca,'xtick')','%.1f'))
     
-    set(gca,'YTick',0:0.5:max(b_values));
+    set(gca,'YTick',0:1:max(b_values));
     set(gca,'yticklabel',num2str(get(gca,'ytick')','%.1f'))
     
     title(strcat('\tau = ', num2str(current_tau, '%.2f')));
