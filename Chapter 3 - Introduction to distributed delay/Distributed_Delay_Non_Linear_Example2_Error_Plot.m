@@ -1,9 +1,9 @@
-t_values = linspace(0,2,500);
+t_values = linspace(0,1,500);
 
 y0 = @(t) [sin(t),cos(t)];
 
 
-n_max = 7;
+n_max = 10;
 n_values = 1:n_max;
 
 trapezium_rule_cauchy_sequence = zeros(size(n_values));

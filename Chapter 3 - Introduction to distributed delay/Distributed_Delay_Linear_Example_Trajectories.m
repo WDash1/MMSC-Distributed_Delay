@@ -1,9 +1,9 @@
-t_values = linspace(0,20,500);
+t_values = linspace(0,25,500);
 
 y0 = @(t) sin(sqrt(2)*t)+cos(t);
 
 
-alpha = -6;
+alpha = -3;
 beta =-20;
 
 N = 50;    
@@ -24,7 +24,8 @@ ylabel('{\it y(t)}', 'FontSize', 20);
 %legend
 ax = gca;
 ax.FontSize = 20; 
-print -depsc -tiff -r300 -painters Distributed_Delay_Linear_Example_Trajectory.eps
+filename = "Distributed_Delay_Example_Linear_Trajectory_alpha="+string(alpha)+"_beta="+string(beta)+".eps";
+print('-depsc', '-tiff', '-r300', '-painters', filename);
 
 function [x,y] = compute_trajectory_simulation(delay_times,weights, alpha, beta, t_values, y0)
     delays = delay_times;

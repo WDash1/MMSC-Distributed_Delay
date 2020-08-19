@@ -1,19 +1,19 @@
 function [f,g] = funs_testing(tau,a,b,dom)
 u = a+b;v = b/(a+b)^2;
 %Chebfun2 area to look for roots in
-d = [-dom, dom, -0.1, dom];
+d = [-dom, dom, -dom, dom];
 %Write f and g as the real and imaginary parts of the dispersion relation,
 %where lambda=x+iy for real x,y. The full dispersion relation is given by:
 %lambda^2 + lambda+lambda*(u^2-2*u*v)*exp(-lambda*tau)+u^2*exp(-lambda*tau)
 
 
-characteristic = @(z)   ((u.^2 + z) .* (z+1+4.*u.*v - 6.*u.*v.*exp(-z.*tau))) ...
-                        -2.*u.*v.*(2.*u - 3.*u.^2.*exp(-z.*tau));
+%characteristic = @(z)   ((u.^2 + z) .* (z+1+4.*u.*v - 6.*u.*v.*exp(-z.*tau))) ...
+%                        -2.*u.*v.*(2.*u - 3.*u.^2.*exp(-z.*tau));
 
 
 
 
-%characteristic = @(z) z.^2 + z.*(1+(u.^2 - 2.*u.*v).*exp(-z.*tau)) + u.^2.*exp(-z.*tau);
+characteristic = @(z) z.^2 + z.*(1+(u.^2 - 2.*u.*v).*exp(-z.*tau)) + u.^2.*exp(-z.*tau);
 
 
 f = chebfun2(@(x,y)real(characteristic(x+y.*1j)), d);
@@ -41,21 +41,27 @@ complex_values = sol(:,1) + sol(:,2).*1j
 evaluation = characteristic(complex_values)
 
 
-figure
-hold off
-plot(roots(f))
 
-figure
-hold off
-plot(roots(g))
-
-figure
+figure('Renderer', 'painters', 'Position', [10 10 300 300], 'Visible', 'on')
 hold on
-plot(roots(f))
-plot(roots(g))
-plot(sol(:,1),sol(:,2),'o')
+box on
+plot(roots(f), 'b')
+plot(roots(g), 'r')
+plot(sol(:,1),sol(:,2),'g*')
+xlabel('Re(\lambda)')
+ylabel('Im(\lambda)')
 
+set(gca,'XTick',d(1):25:d(2));
+set(gca,'xticklabel',num2str(get(gca,'xtick')','%.0f'))
+    
+set(gca,'YTick',d(3):25:d(4));
+set(gca,'yticklabel',num2str(get(gca,'ytick')','%.0f'))
 
+xlim([d(1) d(2)])
+ylim([d(3) d(4)])
 
+set(gca, 'FontSize', 15)
+filename = './RB_Model_Roots_tau='+string(tau)+'_a='+string(a)+'_b='+string(b)+'.eps';
+print('-depsc', '-tiff', '-r300', '-painters', filename);
 
 end
