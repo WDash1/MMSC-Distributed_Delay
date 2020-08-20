@@ -3,8 +3,10 @@ t_values = linspace(0,25,500);
 y0 = @(t) sin(sqrt(2)*t)+cos(t);
 
 
+
 alpha = 0.1;
 beta =0.5;
+
 
 N = 20;    
 
@@ -20,7 +22,7 @@ figure('Renderer', 'painters', 'Position', [10 10 500 500], 'Visible', 'on')
 hold on;
 box on;
 xlim([min(t_values), max(t_values)]);
-
+s
 plot(t_values, legendre_soly, '-', 'DisplayName', 'Gauss Legendre');
 xlabel('{\it t}', 'FontSize', 20);
 ylabel('{\it y(t)}', 'FontSize', 20);
@@ -28,8 +30,10 @@ ylabel('{\it y(t)}', 'FontSize', 20);
 %legend
 ax = gca;
 ax.FontSize = 20; 
-filename = 'Distributed_Delay_Example_Linear_Trajectory_alpha'+string(alpha)+'_beta='+string(beta)+'.eps';
-print ('-depsc', '-tiff', '-r300', '-painters', filename);
+
+filename = "Distributed_Delay_Example_Linear_Trajectory_alpha="+string(alpha)+"_beta="+string(beta)+".eps";
+print('-depsc', '-tiff', '-r300', '-painters', filename);
+
 
 function [x,y] = compute_trajectory_simulation(delay_times,weights, alpha, beta, t_values, y0)
     delays = delay_times;

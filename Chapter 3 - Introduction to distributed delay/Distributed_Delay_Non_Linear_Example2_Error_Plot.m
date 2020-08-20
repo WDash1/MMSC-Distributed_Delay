@@ -1,4 +1,4 @@
-t_values = linspace(0,2,500);
+t_values = linspace(0,1,500);
 
 y0 = @(t) [sin(t),cos(t)];
 
