@@ -1,4 +1,4 @@
-t_values = linspace(0,1,500);
+t_values = linspace(0,2,500);
 
 y0 = @(t) exp(t);
 
@@ -52,7 +52,11 @@ for n = n_values
     end
 end
 
+figure('Renderer', 'painters', 'Position', [10 10 500 500], 'Visible', 'on')
 hold on;
+box on;
+xlim([min(6.*n_values+1), max(6.*(n_max-1)+1)]);
+
 loglog(6.*n_values+1, trapezium_rule_cauchy_sequence{1}, '-o', 'DisplayName', 'Trapezium Rule');
 loglog(6.*n_values+1, simpsons_rule_cauchy_sequence{2}, '-o', 'DisplayName', "Simpson's Rule");
 loglog(6.*n_values+1, simpsons_38_rule_cauchy_sequence{3}, '-o', 'DisplayName', "Simpson's 3/8 Rule");

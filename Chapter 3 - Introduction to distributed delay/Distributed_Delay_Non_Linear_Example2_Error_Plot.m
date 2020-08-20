@@ -3,7 +3,7 @@ t_values = linspace(0,2,500);
 y0 = @(t) [sin(t),cos(t)];
 
 
-n_max = 7;
+n_max = 10;
 n_values = 1:n_max;
 
 trapezium_rule_cauchy_sequence = zeros(size(n_values));
@@ -36,7 +36,11 @@ parfor n = n_values
    gauss_legendre_cauchy_sequence(n) = max(vecnorm(legendre_soly - y0(t_values')'));
 end
 
+figure('Renderer', 'painters', 'Position', [10 10 500 500], 'Visible', 'on')
 hold on;
+box on;
+xlim([min(6.*n_values+1), max(6.*(n_max-1)+1)]);
+
 loglog(6.*n_values+1, trapezium_rule_cauchy_sequence, '-o', 'DisplayName', 'Trapezium Rule');
 loglog(6.*n_values+1, simpsons_rule_cauchy_sequence, '-o', 'DisplayName', "Simpson's Rule");
 loglog(6.*n_values+1, simpsons_38_rule_cauchy_sequence, '-o', 'DisplayName', "Simpson's 3/8 Rule");
@@ -48,7 +52,7 @@ set(gca,'XScale', 'log', 'YScale', 'log')
 ax = gca;
 ax.FontSize = 20; 
 filename = "nonlinear_example2_error_curves.eps";
-print -depsc -tiff -r300 -painters filename;
+print('-depsc', '-tiff', '-r300', '-painters', filename);
 
 
 function [x,y] = compute_trajectory_simulation(delay_times,weights, t_values, y0)
