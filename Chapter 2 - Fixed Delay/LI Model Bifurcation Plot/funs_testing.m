@@ -56,10 +56,10 @@ plot(sol(:,1),sol(:,2),'g*')
 xlabel('Re(\lambda)')
 ylabel('Im(\lambda)')
 
-set(gca,'XTick',d(1):25:d(2));
+set(gca,'XTick',d(1):50:d(2));
 set(gca,'xticklabel',num2str(get(gca,'xtick')','%.0f'))
     
-set(gca,'YTick',d(3):25:d(4));
+set(gca,'YTick',d(3):50:d(4));
 set(gca,'yticklabel',num2str(get(gca,'ytick')','%.0f'))
 
 xlim([d(1) d(2)])

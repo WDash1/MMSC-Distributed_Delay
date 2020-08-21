@@ -5,6 +5,8 @@ t_mesh = linspace(0,10,500);
 a = 0.01;
 b = 0.5;
 
+
+tau = 0.06
 %The fixed point for the parameter values.
 u_fixed = b + a;
 v_fixed = b/((b+a).^2);

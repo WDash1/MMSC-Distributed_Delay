@@ -1,11 +1,11 @@
 %The time mesh on which we evaluate trajectories.
-t_mesh = linspace(0,5,5000);
+t_mesh = linspace(0,20,5000);
 
 %Parameter values
-a = 3;
-b = 3;
+a = 0.2;
+b = 1.3;
 tau_amt = 4;
-tau_values = linspace(0.01,0.04,tau_amt);
+tau_values = linspace(0.01,0.5,tau_amt);
 
 %The fixed point for the parameter values.
 u_fixed = b + a;

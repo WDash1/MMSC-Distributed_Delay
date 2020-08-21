@@ -1,12 +1,12 @@
 %The time mesh on which we evaluate trajectories.
-t_mesh = linspace(00,100,50000);
+t_mesh = linspace(00,40,50000);
 
 %Parameter values
 a = 0.05;
 b = 0.5;
 %a=1
 %b=1
-tau = 1;
+tau = 0.4;
 
 %The fixed point for the parameter values.
 u_fixed = b + a;
@@ -33,12 +33,13 @@ fixed_delay_u_values = current_y_values(1,:);
 fixed_delay_v_values = current_y_values(2,:);
 
 
-sigma_amt = 5;
+sigma_amt = 3;
 distributed_delay_u_values = zeros(sigma_amt, size(t_mesh,2));
 distributed_delay_v_values = zeros(sigma_amt, size(t_mesh,2));
 
-N=21;
-sigma_values = linspace(tau*0.02,tau*0.2,sigma_amt);
+N=41;
+sigma_values = [tau*0.01, tau*0.1, tau*0.2];
+%sigma_values = linspace(tau*0.1,tau*0.2,sigma_amt);
 for sigma_index = 1:sigma_amt
     current_sigma = sigma_values(sigma_index);
 
@@ -65,7 +66,7 @@ for sigma_index = 1:sigma_amt
     plot(distributed_delay_u_values(sigma_index,:)', distributed_delay_v_values(sigma_index,:)', 'DisplayName',"\sigma="+string(sigma_values(sigma_index)));
 end
 plot(u_fixed, v_fixed, '*r', 'DisplayName', 'Fixed Point');
-legend
+%legend
 hold off;
 filename = "Output_Images/Distributed_Delay_LI_Model_uv_Trajectory.eps";
 print('-depsc', '-tiff', '-r300', '-painters', filename);
@@ -83,7 +84,7 @@ plot(t_mesh, fixed_delay_u_values, 'DisplayName', '\sigma=0');
 for sigma_index = 1:sigma_amt
     plot(t_mesh, distributed_delay_u_values(sigma_index,:)', 'DisplayName',"\sigma="+string(sigma_values(sigma_index)));
 end
-legend
+%legend
 hold off;
 filename = "Output_Images/Distributed_Delay_LI_Model_u_values.eps";
 print('-depsc', '-tiff', '-r300', '-painters', filename);
@@ -101,7 +102,7 @@ plot(t_mesh, fixed_delay_v_values, 'DisplayName', '\sigma=0');
 for sigma_index = 1:sigma_amt
     plot(t_mesh, distributed_delay_v_values(sigma_index,:)', 'DisplayName',"\sigma="+string(sigma_values(sigma_index)));
 end
-legend
+%legend
 hold off;
 filename = "Output_Images/Distributed_Delay_LI_Model_v_values.eps";
 print('-depsc', '-tiff', '-r300', '-painters', filename);

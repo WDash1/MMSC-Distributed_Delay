@@ -3,7 +3,7 @@
 
 %The mean and standard deviation of the distribution.
 mu = 0.6;
-sigma = mu*0.2;
+sigma = mu*0.1;
 
 N=31;
 [evaluation_points, integrand_weights] = computeGaussHermiteWeights(mu, sigma, N);

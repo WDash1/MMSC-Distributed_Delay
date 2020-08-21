@@ -1,6 +1,6 @@
 %The time values for which we wish to simulate the trajectories of the
 %system.
-t_values = linspace(0,50,100);
+t_values = linspace(0,30,100);
 
 %The number of integral discretisation points.
 %N=10;
@@ -10,13 +10,13 @@ y0 = @(t) [sin(t),cos(t)];
 
 
 hold on
-plot(t_values, sin(t_values));
-plot(t_values, cos(t_values));
+%plot(t_values, sin(t_values));
+%plot(t_values, cos(t_values));
 
 
 
 
-N=50;
+N=40;
 
 %The weights and evaluation points to be used for the legendre polynomial
 %approximation of our integral.
@@ -29,12 +29,11 @@ N=50;
 cauchy_sequence(N) = max(abs(soly(2,:) - cos(solx)));
     
 %Plot the resulting trajectory.
-plot(solx, soly(1,:));
-plot(solx, soly(2,:));
+plot(solx, soly(1,:), 'DisplayName','x(t)');
+plot(solx, soly(2,:), 'DisplayName','y(t)');
 
-legend('sin(t)', 'cos(t)', 'x(t)', 'y(t)');
 xlabel('t');
-
+legend
 
 
 
