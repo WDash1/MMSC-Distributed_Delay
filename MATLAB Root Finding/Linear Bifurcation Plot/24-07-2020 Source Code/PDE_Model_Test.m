@@ -5,7 +5,7 @@ b = 1.3;
 
 %The diffusion coefficients for simulations of the PDE model.
 Du = 1;
-Dv = 119;
+Dv = 100;
 
 %The fixed point for our model.
 u_fixed = b + a;
@@ -16,7 +16,7 @@ n = 100;
 
 %The maximum and minimum spatial values that we wish to use for
 %simulations.
-x_max = 100;
+x_max = 50;
 x_min = 0;
 
 %The discretised space values that will be used in simulations of our PDE.
@@ -34,10 +34,10 @@ initial_data = [u0(x_values) ; v0(x_values)];
 dydt = @(t,y) computeNoDelaySchnakenbergDerivative(a,b,Du,Dv,n,h,y);
 
 %The time mesh for our model.
-t_mesh = linspace(1,100,100);
+t_mesh = linspace(1,50,50);
 
 %Simulate our PDE and extract the u and v values.
-[time_mesh,solution_mesh] = ode23(dydt,t_mesh,initial_data);
+[time_mesh,solution_mesh] = ode15s(dydt,t_mesh,initial_data);
 u_values = solution_mesh(:,1:n+1);
 v_values = solution_mesh(:,n+1+(1:(n+1)));
 [XX,YY] = meshgrid(x_values,t_mesh);

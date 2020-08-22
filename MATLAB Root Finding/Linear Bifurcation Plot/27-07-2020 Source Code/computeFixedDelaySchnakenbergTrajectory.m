@@ -59,7 +59,7 @@ function solution = computeFixedDelaySchnakenbergTrajectory(...
     
     y0 = @(t) [u0(t),v0(t)];
     %Simulate the fixed delay system.
-    solution = ddesd(dydt, tau, y0, [0,t_max],options);
+    solution = dde23(dydt, tau, y0, [0,t_max],options);
 end
 
 
@@ -81,9 +81,10 @@ end
 function derivative = fixedDelaySchnakenberg(a,b,t,y,Z)
     delay_componnent = (Z(1,:).^2) .* Z(2,:);
     
-    derivative_u = a - y(1) + delay_componnent;
-    derivative_v = b - delay_componnent;
-
+    %derivative_u = a - y(1) + delay_componnent;
+    %derivative_v = b - delay_componnent;
+    derivative_u = a - y(1) + (-2.*(y(1).^2) .* y(2)) +3.*delay_componnent;
+    derivative_v = b - ((y(1).^2) .* y(2));
     derivative = [derivative_u, derivative_v]';
 end
 

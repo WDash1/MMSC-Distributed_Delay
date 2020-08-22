@@ -1,9 +1,9 @@
 %The time mesh on which we evaluate trajectories.
-t_mesh = linspace(00,5,50000);
+t_mesh = linspace(00,40,50000);
 
 %Parameter values
-a = 3;
-b = 3;
+a = 0.05;
+b = 0.5;
 %a=1
 %b=1
 tau = 0.04;
@@ -33,17 +33,19 @@ fixed_delay_u_values = current_y_values(1,:);
 fixed_delay_v_values = current_y_values(2,:);
 
 
-sigma_amt = 2;
+sigma_amt = 3;
 distributed_delay_u_values = zeros(sigma_amt, size(t_mesh,2));
 distributed_delay_v_values = zeros(sigma_amt, size(t_mesh,2));
 
-N=51;
-sigma_values = linspace(tau*0.02,tau*0.2,sigma_amt);
+N=11;
+sigma_values = [tau*0.01, tau*0.1, tau*0.2];
+%sigma_values = linspace(tau*0.1,tau*0.1,sigma_amt);
+%sigma_values = linspace(tau*0.01,tau*0.1,sigma_amt);
 for sigma_index = 1:sigma_amt
     current_sigma = sigma_values(sigma_index);
 
 
-    [delay_values, weights] = computeGaussHermiteWeights(0,2*tau,tau,current_sigma,N);
+    [delay_values, weights] = computeGaussHermiteWeights(0,2*tau,tau,current_sigma,N)
 
     sol = computeDistributedDelayRLBSchnakenbergTrajectory(a,b,double(delay_values), double(weights), max(t_mesh), u0,v0,10e-18,10e9);
     current_y_values = deval(sol,t_mesh);
